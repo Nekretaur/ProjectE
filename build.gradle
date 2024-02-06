@@ -14,7 +14,7 @@ plugins {
 
 tasks.named('wrapper', Wrapper).configure {
     //Define wrapper values here so as to not have to always do so when updating gradlew.properties
-    gradleVersion = '8.5'
+    gradleVersion = '8.6'
     distributionType = Wrapper.DistributionType.ALL
 }
 
@@ -122,19 +122,12 @@ archivesBaseName = "projecte"
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(21))
         vendor.set(JvmVendorSpec.JETBRAINS)
     }
 }
 
-minecraft {
-    if (mappings_channel == "parchment_previous") {
-        mappings channel: 'parchment', version: "${previous_minecraft_version}-${mappings_version}"
-    } else {
-        mappings channel: "${mappings_channel}", version: "${mappings_version}"
-    }
-
-    accessTransformers.from(file('src/main/resources/META-INF/accesstransformer.cfg'))
+minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs { runSpecContainer ->
         client {
@@ -187,7 +180,6 @@ minecraft {
             }
         }
     }
-}
 
 def setupRunConfig(RunConfig runConfig, boolean supportsGameTests, String directory = "run") {
     runConfig.workingDirectory(file(directory))
